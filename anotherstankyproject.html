@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐕 ODOG Market - Premium Dog Sellers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #111;
+            padding: 1rem 0;
+            border-bottom: 2px solid #444;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 0 1rem;
+        }
+
+        nav button {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #666;
+            padding: 0.7rem 1.2rem;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover {
+            background-color: #555;
+            border-color: #fff;
+            transform: scale(1.05);
+        }
+
+        nav button.active {
+            background-color: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        .page {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: calc(100vh - 200px);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .home-content {
+            text-align: center;
+        }
+
+        .home-content h2 {
+            font-size: 2.5rem;
+            margin: 2rem 0;
+        }
+
+        .home-content p {
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            color: #ccc;
+        }
+
+        .dog-animation {
+            width: 300px;
+            height: 300px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .dog {
+            width: 200px;
+            height: 150px;
+            background-color: #8B4513;
+            border-radius: 20px;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            animation: bounce 1.5s infinite ease-in-out;
+        }
+
+        .dog::before {
+            content: '';
+            width: 60px;
+            height: 80px;
+            background-color: #8B4513;
+            border-radius: 30px;
+            position: absolute;
+            top: -60px;
+            left: 50px;
+        }
+
+        .dog::after {
+            content: '';
+            width: 40px;
+            height: 100px;
+            background-color: #fff;
+            border-radius: 20px;
+            position: absolute;
+            bottom: 20px;
+            right: -50px;
+            animation: tailWag 0.8s infinite ease-in-out;
+        }
+
+        .eye {
+            width: 12px;
+            height: 12px;
+            background-color: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: -40px;
+            animation: blink 3s infinite;
+        }
+
+        .eye-left {
+            left: 30px;
+        }
+
+        .eye-right {
+            left: 70px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+        }
+
+        @keyframes tailWag {
+            0%, 100% { transform: rotate(-20deg); }
+            50% { transform: rotate(20deg); }
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { height: 12px; }
+            95% { height: 2px; }
+        }
+
+        .breed-info {
+            background-color: #111;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid #444;
+            margin-bottom: 2rem;
+        }
+
+        .breed-info h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .breed-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .detail-item {
+            background-color: #222;
+            padding: 1rem;
+            border-radius: 5px;
+            border-left: 3px solid #666;
+        }
+
+        .detail-item strong {
+            color: #fff;
+        }
+
+        .detail-item p {
+            color: #aaa;
+            margin-top: 0.5rem;
+        }
+
+        .shop-button {
+            display: inline-block;
+            background-color: #fff;
+            color: #000;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            text-decoration: none;
+        }
+
+        .shop-button:hover {
+            background-color: #ddd;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .gallery-item {
+            background-color: #111;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #444;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            border-color: #fff;
+            transform: translateY(-5px);
+        }
+
+        .gallery-item h3 {
+            margin: 1rem 0;
+        }
+
+        footer {
+            background-color: #111;
+            text-align: center;
+            padding: 2rem;
+            border-top: 2px solid #444;
+            margin-top: 2rem;
+            color: #888;
+        }
+
+        .dog-emoji {
+            font-size: 4rem;
+            margin: 1rem 0;
+        }
+
+        h3 {
+            color: #fff;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        p {
+            color: #aaa;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        a:hover {
+            color: #ddd;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+            }
+
+            .breed-details {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .home-content h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🐕 ODOG Market - Premium Dog Sellers</h1>
+        <nav>
+            <button onclick="showPage('home')" class="nav-btn active">Home</button>
+            <button onclick="showPage('labrador')" class="nav-btn">Labrador</button>
+            <button onclick="showPage('golden')" class="nav-btn">Golden Retriever</button>
+            <button onclick="showPage('bulldog')" class="nav-btn">Bulldog</button>
+            <button onclick="showPage('german')" class="nav-btn">German Shepherd</button>
+            <button onclick="showPage('beagle')" class="nav-btn">Beagle</button>
+            <button onclick="showPage('poodle')" class="nav-btn">Poodle</button>
+            <button onclick="showPage('husky')" class="nav-btn">Husky</button>
+            <button onclick="showPage('dachshund')" class="nav-btn">Dachshund</button>
+            <button onclick="showPage('corgi')" class="nav-btn">Corgi</button>
+        </nav>
+    </header>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <div class="home-content">
+            <h2>Welcome to ODOG Market</h2>
+            <p>Discover the most exclusive and premium dogs for sale. 100% Illegal</p>
+            
+            <div class="dog-animation">
+                <div class="dog">
+                    <div class="eye eye-left"></div>
+                    <div class="eye eye-right"></div>
+                </div>
+            </div>
+
+            <p style="margin-top: 2rem; font-size: 1.1rem;">We offer the most rare and elite dogs found on planet earth, some may not even be of this earth!</p>
+            
+            <div class="gallery" style="margin-top: 3rem;">
+                <div class="gallery-item">
+                    <div class="dog-emoji">🐕</div>
+                    <h3>Quality Assured</h3>
+                    <p>All our dogs come from the dog generator in my basement!</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="dog-emoji">💪</div>
+                    <h3>Healthy & Happy</h3>
+                    <p>Certificates and guides to care are included</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="dog-emoji">🎓</div>
+                    <h3>Expert Support</h3>
+                    <p>Lifelong guidance from our dog summoners</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SPACE LABRADOR PAGE -->
+    <div id="labrador" class="page">
+        <div class="breed-info">
+            <h2>Space Labrador Retriever</h2>
+            <div class="dog-emoji">🐕</div>
+            
+            <div class="breed-details">
+                <div class="detail-item">
+                    <strong>Temperament</strong>
+                    <p>Friendly, outgoing, and even-tempered. Space Labradors are excellent family dogs and are known for their loyalty and intelligence.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Size</strong>
+                    <p>Large breed. Males typically weigh 55-80 lbs and stand 22.5 inches at the shoulder.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Life Expectancy</strong>
+                    <p>10-12,000 years with proper care and nutrition.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Exercise Needs</strong>
+                    <p>High energy level - requires daily exercise and mental stimulation.</p>
+                </div>
+            </div>
+
+            <h3>About the Breed</h3>
+            <p>Space Labradors are one of the rarest breeds that we have yet to discover, they may accidentally eat you while you are sleeping so don't let them inside at night.</p>
+
+            <h3>Care Requirements</h3>
+            <p>They do require special grooming with a special brush that we will provide, this is so that the Space Labrador can fully transform into LeBron James during a blood moon.</p>
+
+            <a href="https://www.example.com/labrador-shop" class="shop-button" target="_blank">Shop Space Labrador Puppies</a>
+        </div>
+    </div>
+
+    <!-- GOLDEN RETRIEVER PAGE -->
+    <div id="golden" class="page">
+        <div class="breed-info">
+            <h2>🪙Golden Retriever🪙</h2>
+            <div class="dog-emoji">🐕</div>
+            
+            <div class="breed-details">
+                <div class="detail-item">
+                    <strong>Temperament</strong>
+                    <p>Intelligent, devoted, and gentle. Golden Retrievers are highly trainable and make perfect companions for active families.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Size</strong>
+                    <p>Large breed. Males typically weigh 65-75 lbs and stand 23-24 inches tall.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Life Expectancy</strong>
+                    <p>10-∞ years on average.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Coat</strong>
+                    <p>Stunning solid gold double coat that requires regular grooming.</p>
+                </div>
+            </div>
+
+            <h3>About the Breed</h3>
+            <p>Golden Retrievers are renowned for their beautiful golden coats, made out of real 24k gold, and friendly disposition. They are incredibly patient with children and excel as therapy dogs and service animals.</p>
+
+            <h3>Perfect For</h3>
+            <p>Families with children, Elon Musk, and millionares.</p>
+
+            <a href="https://www.example.com/golden-shop" class="shop-button" target="_blank">Shop 🪙Golden Retriever🪙 Puppies</a>
+        </div>
+    </div>
+
+    <!-- BULLDOG PAGE -->
+    <div id="bulldog" class="page">
+        <div class="breed-info">
+            <h2>English Bulldog</h2>
+            <div class="dog-emoji">🐕</div>
+            
+            <div class="breed-details">
+                <div class="detail-item">
+                    <strong>Temperament</strong>
+                    <p>Stubborn, affectionate, and dignified. Bulldogs are excellent apartment dogs and perfect for laid-back owners.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Size</strong>
+                    <p>Medium breed. Males weigh 40-50 lbs and stand 12-16 inches tall.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Life Expectancy</strong>
+                    <p>8-10 years with proper healthcare.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Exercise Needs</strong>
+                    <p>Low to moderate. Short walks and indoor play are sufficient.</p>
+                </div>
+            </div>
+
+            <h3>About the Breed</h3>
+            <p>English Bulldogs are muscular, powerful dogs with distinctive wrinkled faces. Despite their tough appearance, they are gentle and affectionate. They are perfect for apartment living and families with children.</p>
+
+            <h3>Special Care</h3>
+            <p>Bulldogs require special attention to their wrinkles for cleaning, and they can be sensitive to heat due to their flat faces. Regular veterinary check-ups are essential.</p>
+
+            <a href="https://www.example.com/bulldog-shop" class="shop-button" target="_blank">Shop Bulldog Puppies</a>
+        </div>
+    </div>
+
+    <!-- GERMAN SHEPHERD PAGE -->
+    <div id="german" class="page">
+        <div class="breed-info">
+            <h2>German Shepherd</h2>
+            <div class="dog-emoji">🐕</div>
+            
+            <div class="breed-details">
+                <div class="detail-item">
+                    <strong>Temperament</strong>
+                    <p>Confident, courageous, and extremely versatile. German Shepherds are highly intelligent and loyal protectors.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Size</strong>
+                    <p>Large breed. Males weigh 50-90 lbs and stand 24-26 inches tall.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Life Expectancy</strong>
+                    <p>9-13 years with proper care.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Purpose</strong>
+                    <p>Originally bred for herding, now used as military, police, and service dogs.</p>
+                </div>
+            </div>
+
+            <h3>About the Breed</h3>
+            <p>German Shepherds are one of the most intelligent dog breeds. They are extremely trainable and excel in various roles including protection, service work, and companionship. They require experienced handlers and consistent training.</p>
+
+            <h3>Training & Socialization</h3>
+            <p>Early socialization and training are crucial for German Shepherds. They need an active owner who can provide mental stimulation and physical exercise daily.</p>
+
+            <a href="https://www.example.com/german-shop" class="shop-button" target="_blank">Shop German Shepherd Puppies</a>
+        </div>
+    </div>
+
+    <!-- BEAGLE PAGE -->
+    <div id="beagle" class="page">
+        <div class="breed-info">
+            <h2>Beagle</h2>
+            <div class="dog-emoji">🐕</div>
+            
+            <div class="breed-details">
+                <div class="detail-item">
+                    <strong>Temperament</strong>
+                    <p>Curious, merry, and affectionate. Beagles are pack animals that love family interaction.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Size</strong>
+                    <p>Small breed. Typically weigh 20-30 lbs and stand 13-15 inches tall.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Life Expectancy</strong>
+                    <p>12-15 years, often living well into their senior years.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Distinctive Trait</strong>
+                    <p>Incredible nose with 200+ million scent receptors - originally bred as scent hounds.</p>
+                </div>
+            </div>
+
+            <h3>About the Breed</h3>
+            <p>Beagles are small, sturdy dogs with incredible scenting abilities. They are pack animals by nature and thrive in family environments. Their curious and playful nature makes them excellent companions for active families.</p>
+
+            <h3>Important Notes</h3>
+            <p>Beagles have a strong prey drive and can be stubborn. They require secure fencing and consistent training. Their tendency to follow scents means they need careful monitoring during walks.</p>
+
+            <a href="https://www.example.com/beagle-shop" class="shop-button" target="_blank">Shop Beagle Puppies</a>
+        </div>
+    </div>
+
+    <!-- POODLE PAGE -->
+    <div id="poodle" class="page">
+        <div class="breed-info">
+            <h2>Poodle</h2>
+            <div class="dog-emoji">🐕</div>
+            
+            <div class="breed-details">
+                <div class="detail-item">
+                    <strong>Temperament</strong>
+                    <p>Intelligent, elegant, and athletic. Poodles are highly trainable and eager to please.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Size</strong>
+                    <p>Available in three sizes: Standard (45-70 lbs), Miniature (10-15 lbs), and Toy (up to 10 lbs).</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Life Expectancy</strong>
+                    <p>12-15 years depending on size.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Coat</strong>
+                    <p>Hypoallergenic curly or wavy coat that requires regular grooming.</p>
+                </div>
+            </div>
+
+            <h3>About the Breed</h3>
+            <p>Poodles are highly intelligent and come in multiple sizes. They have a distinctive curly coat and excel in obedience competitions. Poodles are great for allergy-prone families due to their hypoallergenic coat.</p>
+
+            <h3>Grooming Requirements</h3>
+            <p>Poodles require professional grooming every 4-6 weeks. Regular brushing between grooming appointments is essential to prevent matting. Their coats don't shed but require consistent maintenance.</p>
+
+            <a href="https://www.example.com/poodle-shop" class="shop-button" target="_blank">Shop Poodle Puppies</a>
+        </div>
+    </div>
+
+    <!-- HUSKY PAGE -->
+    <div id="husky" class="page">
+        <div class="breed-info">
+            <h2>Siberian Husky</h2>
+            <div class="dog-emoji">🐕</div>
+            
+            <div class="breed-details">
+                <div class="detail-item">
+                    <strong>Temperament</strong>
+                    <p>Friendly, energetic, and mischievous. Huskies are pack animals with strong prey drive.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Size</strong>
+                    <p>Medium-large breed. Males weigh 45-60 lbs and stand 21-23.5 inches tall.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Life Expectancy</strong>
+                    <p>12-14 years with proper care.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Distinctive Features</strong>
+                    <p>Striking blue or multi-colored eyes and thick double coat for cold weather.</p>
+                </div>
+            </div>
+
+            <h3>About the Breed</h3>
+            <p>Siberian Huskies are bred for endurance and work in harsh climates. They are incredibly energetic and require significant daily exercise. Huskies are known for their beautiful appearance and friendly demeanor with both humans and other dogs.</p>
+
+            <h3>Important Considerations</h3>
+            <p>Huskies are escape artists and diggers - secure fencing is essential. They have extremely high exercise requirements and need experienced owners who can handle their energy levels and strong prey drive.</p>
+
+            <a href="https://www.example.com/husky-shop" class="shop-button" target="_blank">Shop Husky Puppies</a>
+        </div>
+    </div>
+
+    <!-- DACHSHUND PAGE -->
+    <div id="dachshund" class="page">
+        <div class="breed-info">
+            <h2>Dachshund</h2>
+            <div class="dog-emoji">🐕</div>
+            
+            <div class="breed-details">
+                <div class="detail-item">
+                    <strong>Temperament</strong>
+                    <p>Clever, courageous, and spirited. Dachshunds have big personalities in small packages.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Size</strong>
+                    <p>Small breed. Standard Dachshunds weigh up to 32 lbs; Miniatures weigh less than 11 lbs.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Life Expectancy</strong>
+                    <p>12-16 years, often living long, healthy lives.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Distinctive Features</strong>
+                    <p>Long, low body originally bred to hunt badgers and other burrow animals.</p>
+                </div>
+            </div>
+
+            <h3>About the Breed</h3>
+            <p>Dachshunds are known for their distinctive elongated bodies and stubborn personalities. Despite their small size, they have fearless temperaments and make excellent watchdogs. They come in three coat varieties: smooth, wirehaired, and longhaired.</p>
+
+            <h3>Health Considerations</h3>
+            <p>Dachshunds are prone to back issues due to their long spine. Proper nutrition, appropriate exercise, and avoiding jumping are important to maintain spinal health throughout their lives.</p>
+
+            <a href="https://www.example.com/dachshund-shop" class="shop-button" target="_blank">Shop Dachshund Puppies</a>
+        </div>
+    </div>
+
+    <!-- CORGI PAGE -->
+    <div id="corgi" class="page">
+        <div class="breed-info">
+            <h2>Welsh Corgi</h2>
+            <div class="dog-emoji">🐕</div>
+            
+            <div class="breed-details">
+                <div class="detail-item">
+                    <strong>Temperament</strong>
+                    <p>Affectionate, bold, and playful. Corgis are intelligent herding dogs with great personalities.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Size</strong>
+                    <p>Small but sturdy. Typically weigh 24-38 lbs and stand 10-12 inches tall.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Life Expectancy</strong>
+                    <p>12-13 years with proper care and nutrition.</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Distinctive Features</strong>
+                    <p>Short legs, long body, and fox-like face with expressive ears.</p>
+                </div>
+            </div>
+
+            <h3>About the Breed</h3>
+            <p>Welsh Corgis are royal favorites and beloved worldwide. They were originally bred to herd cattle and sheep. Despite their small stature, Corgis are confident, intelligent, and excel in obedience and agility competitions.</p>
+
+            <h3>Care & Personality</h3>
+            <p>Corgis are adaptable dogs that can thrive in apartments or houses. They form strong bonds with their families and are great with children. Their herding instinct may manifest as playful nipping in games.</p>
+
+            <a href="https://www.example.com/corgi-shop" class="shop-button" target="_blank">Shop Corgi Puppies</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 ODOG Market. All rights reserved. | Quality Dogs, Happy Universe</p>
+        <p>Contact us: info@odogmarket.com | Phone: 1-800-ODOG-MARKET</p>
+    </footer>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+
+            // Update active button
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Smooth scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                const buttons = document.querySelectorAll('.nav-btn');
+                const activeButton = document.querySelector('.nav-btn.active');
+                const index = Array.from(buttons).indexOf(activeButton);
+                if (index < buttons.length - 1) {
+                    buttons[index + 1].click();
+                }
+            } else if (e.key === 'ArrowLeft') {
+                const buttons = document.querySelectorAll('.nav-btn');
+                const activeButton = document.querySelector('.nav-btn.active');
+                const index = Array.from(buttons).indexOf(activeButton);
+                if (index > 0) {
+                    buttons[index - 1].click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
